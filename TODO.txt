@@ -1,0 +1,12 @@
+
+conflicting settings:
+first/last/other chartype -> min/max chars
+only unique chars -> charset < pw length
+
+profiles (local storage) - web, wpa, wep, different sites
+
+convert memorable password to random using profile / cipher
+generate multiple passwords (show, download csv/txt)
+
+
+https://xkpasswd.net/s/

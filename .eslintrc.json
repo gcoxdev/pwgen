@@ -1,0 +1,56 @@
+{
+  "extends": ["airbnb", "prettier", "plugin:node/recommended"],
+  "parser": "babel-eslint",
+  "plugins": ["prettier"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": "warn",
+    "no-console": "off",
+    "func-names": "off",
+    "no-process-exit": "off",
+    "object-shorthand": "off",
+    "class-methods-use-this": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/state-in-constructor": "off",
+    "react/prop-types": "off",
+    "react/jsx-curly-newline": "off",
+    "react/jsx-wrap-multilines": [
+      "error",
+      {
+        "declaration": "parens-new-line",
+        "assignment": "parens-new-line",
+        "return": "parens-new-line",
+        "arrow": "parens-new-line",
+        "condition": "parens-new-line",
+        "logical": "ignore",
+        "prop": "ignore"
+      }
+    ],
+    "node/no-unsupported-features/es-syntax": [
+      "off",
+      {
+        "version": ">=8.0.0",
+        "ignores": []
+      }
+    ],
+    "node/no-extraneous-import": [
+      "error",
+      {
+        "allowModules": ["prop-types"]
+      }
+    ],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": ["__REDUX_DEVTOOLS_EXTENSION__"]
+      }
+    ]
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  }
+}
