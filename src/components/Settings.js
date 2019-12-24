@@ -25,7 +25,12 @@ import {
   getPoolSets,
   getAvailableCharTypes
 } from '../helpers';
-import { updatePWSettings, createPassword, resetPWSettings, updateUISettings } from '../actions';
+import {
+  updatePWSettings,
+  createPassword,
+  resetPWSettings,
+  updateUISettings
+} from '../actions';
 import { passwordSettings as defaultPasswordSettings } from '../reducers/defaultSettings';
 
 class Settings extends Component {
@@ -307,14 +312,15 @@ class Settings extends Component {
   handleResetSettings = e => {
     console.log('reset settings');
     const { resetPWSettingsConnect } = this.props;
+    console.log(e.target);
     resetPWSettingsConnect();
   };
 
-  handleAdvanceSettingsClick = e => {
+  /* handleAdvanceSettingsClick = e => {
     this.setState(prevState => ({
       advancedHidden: !prevState.advancedHidden
     })
-  }
+  } */
 
   isLastChecked(name) {
     const { passwordSettings } = this.props;
@@ -368,7 +374,7 @@ class Settings extends Component {
 
   render() {
     const { passwordSettings } = this.props;
-    const { uiSettings } = this.props;
+    // const { uiSettings } = this.props;
     const { advancedHidden } = this.state;
     const {
       passwordLength,
@@ -378,26 +384,26 @@ class Settings extends Component {
       hasSymbols,
       includeCharacters,
       excludeCharacters,
-      alwaysIncludeCharacters,
+      // alwaysIncludeCharacters,
       mostConsecutive,
       similarChars,
       uniqueChars,
       firstCharType,
       lastCharType,
       otherCharType,
-      totalMinChars,
+      // totalMinChars,
       totalCharSetCount,
       charSetPools,
       minUpper,
       minLower,
       minNums,
-      minSyms,
-      minUpperMin,
-      minLowerMin,
-      minNumsMin,
-      minSymsMin
+      minSyms
+      // minUpperMin,
+      // minLowerMin,
+      // minNumsMin,
+      // minSymsMin
     } = passwordSettings;
-    const { advancedSettings } = uiSettings;
+    // const { advancedSettings } = uiSettings;
     const availableTypes = getAvailableCharTypes(passwordSettings);
     const availableTypesCount = availableTypes.length;
     return (
@@ -467,284 +473,283 @@ class Settings extends Component {
           <Col xs={8}>
             <Button
               variant="outline-secondary"
-              onClick={this.handleAdvanceSettingsClick)
-            }
-            block
-          >
+              // onClick={this.handleAdvanceSettingsClick}
+              block
+            >
               <FontAwesomeIcon icon={faTools} />
-            &nbsp;Advanced Settings
+              &nbsp;Advanced Settings
             </Button>
           </Col>
-        <Col xs={4}>
-          <Button
-            variant="outline-danger"
-            onClick={this.handleResetSettings}
-            block
-          >
-            <FontAwesomeIcon icon={faSyncAlt} />
-            &nbsp;Reset
+          <Col xs={4}>
+            <Button
+              variant="outline-danger"
+              onClick={this.handleResetSettings}
+              block
+            >
+              <FontAwesomeIcon icon={faSyncAlt} />
+              &nbsp;Reset
             </Button>
-        </Col>
+          </Col>
         </Row>
-      <Row className={advancedHidden ? 'd-none' : ''}>
-        <Col>
-          <Row>
-            <Col>
-              <Form.Group controlId="profile-name">
-                <Form.Label>Profile Name</Form.Label>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="Profile name"
-                    aria-label="Profile name"
-                    aria-describedby="basic-addon2"
-                  />
-                  <InputGroup.Append>
-                    <Button
-                      variant="outline-warning"
-                      onClick={() => console.log('update or add')}
-                    >
-                      <FontAwesomeIcon icon={faPenSquare} />
-                      &nbsp;Update
-                      </Button>
-                  </InputGroup.Append>
-                </InputGroup>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <Form.Group controlId="advanced-include">
-                <Form.Label>
-                  Include Characters&nbsp;
-                    <OverlayTrigger
-                    placement="right"
-                    overlay={
-                      <Tooltip id="tooltip-right-include-chars">
-                        Type all characters you want to include sequentially.
-                        There is no delimeter. Excluded characters will take
-                        precedence over included characters.
-                        </Tooltip>
-                    }
-                  >
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                  </OverlayTrigger>
-                </Form.Label>
-                <Form.Control
-                  name="includeCharacters"
-                  type="text"
-                  placeholder=""
-                  value={includeCharacters}
-                  onChange={e =>
-                    this.onUpdateSettings(e, value =>
-                      getUniqueChars(removeSpaceAndTrim(value))
-                    )
-                  }
-                />
-              </Form.Group>
-            </Col>
-            <Col sm={6}>
-              <Form.Group controlId="advanced-exclude">
-                <Form.Label>
-                  Exclude Characters&nbsp;
-                    <OverlayTrigger
-                    placement="right"
-                    overlay={
-                      <Tooltip id="tooltip-right-exclude-chars">
-                        Type all characters you want to exclude sequentially.
-                        There is no delimeter. Excluded characters will take
-                        precedence over included characters.
-                        </Tooltip>
-                    }
-                  >
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                  </OverlayTrigger>
-                </Form.Label>
-                <Form.Control
-                  name="excludeCharacters"
-                  type="text"
-                  placeholder=""
-                  value={excludeCharacters}
-                  onChange={e =>
-                    this.onUpdateSettings(e, value =>
-                      getUniqueChars(removeSpaceAndTrim(value))
-                    )
-                  }
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={6}>
-              <Form.Group controlId="advanced-most-consecutive">
-                <Form.Label>Most Consecutive Identical Characters</Form.Label>
-                <Form.Control
-                  as={NumericInput}
-                  strict
-                  mobile
-                  name="mostConsecutive"
-                  min={0}
-                  max={passwordLength}
-                  value={mostConsecutive}
-                  onChange={this.onNumberChange}
-                />
-              </Form.Group>
-            </Col>
-            <Col className="py-3" sm={6}>
-              <Form.Check custom type="checkbox" id="advanced-similar">
-                <Form.Check.Input
-                  name="similarChars"
-                  type="checkbox"
-                  checked={similarChars}
-                  onChange={this.onUpdateSettings}
-                />
-                <Form.Check.Label>
-                  Exclude Similar Characters&nbsp;
-                    <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id="tooltip-right-advanced-similar">
-                        o, 0, O, i, I, l, 1, L, |, /, \, (, ), &#123;, &#125;,
-                          <br />
-                        Will take precedence over included characters.
-                        </Tooltip>
-                    }
-                  >
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                  </OverlayTrigger>
-                </Form.Check.Label>
-              </Form.Check>
-              <Form.Check
-                custom
-                name="uniqueChars"
-                type="checkbox"
-                id="advanced-unique"
-                label="Only Unique Characters"
-                disabled={totalCharSetCount < passwordLength}
-                checked={uniqueChars}
-                onChange={this.onUpdateSettings}
-              />
-            </Col>
-          </Row>
-          {this.getTotalCharTypeChecked() > 1 ? (
+        <Row className={advancedHidden ? 'd-none' : ''}>
+          <Col>
             <Row>
-              <Col sm={4}>
-                <Form.Group controlId="advanced-first-char-type">
-                  <Form.Label>First Character Type</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="firstCharType"
-                    value={firstCharType}
-                    onChange={this.onCharTypeChange}
-                  >
-                    {this.renderCharTypeOptions()}
-                  </Form.Control>
-                </Form.Group>
-              </Col>
-              <Col sm={4}>
-                <Form.Group controlId="advanced-other-char-type">
-                  <Form.Label>Other Character Type</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="otherCharType"
-                    value={otherCharType}
-                    onChange={this.onCharTypeChange}
-                  >
-                    {this.renderCharTypeOptions()}
-                  </Form.Control>
-                </Form.Group>
-              </Col>
-              <Col sm={4}>
-                <Form.Group controlId="advanced-last-char-type">
-                  <Form.Label>Last Character Type</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="lastCharType"
-                    value={lastCharType}
-                    onChange={this.onCharTypeChange}
-                  >
-                    {this.renderCharTypeOptions()}
-                  </Form.Control>
+              <Col>
+                <Form.Group controlId="profile-name">
+                  <Form.Label>Profile Name</Form.Label>
+                  <InputGroup className="mb-3">
+                    <FormControl
+                      placeholder="Profile name"
+                      aria-label="Profile name"
+                      aria-describedby="basic-addon2"
+                    />
+                    <InputGroup.Append>
+                      <Button
+                        variant="outline-warning"
+                        onClick={() => console.log('update or add')}
+                      >
+                        <FontAwesomeIcon icon={faPenSquare} />
+                        &nbsp;Update
+                        </Button>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
               </Col>
             </Row>
-          ) : null}
-          <Row>
-            {(hasUppercase && availableTypesCount > 1) ||
-              charSetPools.includeUpperPool.length > 0 ? (
-                <Col sm={6}>
-                  <Form.Group controlId="advanced-uppercase-min">
-                    <Form.Label>Min. UPPERCASE</Form.Label>
+            <Row>
+              <Col sm={6}>
+                <Form.Group controlId="advanced-include">
+                  <Form.Label>
+                    Include Characters&nbsp;
+                      <OverlayTrigger
+                      placement="right"
+                      overlay={
+                        <Tooltip id="tooltip-right-include-chars">
+                          Type all characters you want to include sequentially.
+                          There is no delimeter. Excluded characters will take
+                          precedence over included characters.
+                          </Tooltip>
+                      }
+                    >
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </OverlayTrigger>
+                  </Form.Label>
+                  <Form.Control
+                    name="includeCharacters"
+                    type="text"
+                    placeholder=""
+                    value={includeCharacters}
+                    onChange={e =>
+                      this.onUpdateSettings(e, value =>
+                        getUniqueChars(removeSpaceAndTrim(value))
+                      )
+                    }
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm={6}>
+                <Form.Group controlId="advanced-exclude">
+                  <Form.Label>
+                    Exclude Characters&nbsp;
+                      <OverlayTrigger
+                      placement="right"
+                      overlay={
+                        <Tooltip id="tooltip-right-exclude-chars">
+                          Type all characters you want to exclude sequentially.
+                          There is no delimeter. Excluded characters will take
+                          precedence over included characters.
+                          </Tooltip>
+                      }
+                    >
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </OverlayTrigger>
+                  </Form.Label>
+                  <Form.Control
+                    name="excludeCharacters"
+                    type="text"
+                    placeholder=""
+                    value={excludeCharacters}
+                    onChange={e =>
+                      this.onUpdateSettings(e, value =>
+                        getUniqueChars(removeSpaceAndTrim(value))
+                      )
+                    }
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={6}>
+                <Form.Group controlId="advanced-most-consecutive">
+                  <Form.Label>Most Consecutive Identical Characters</Form.Label>
+                  <Form.Control
+                    as={NumericInput}
+                    strict
+                    mobile
+                    name="mostConsecutive"
+                    min={0}
+                    max={passwordLength}
+                    value={mostConsecutive}
+                    onChange={this.onNumberChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col className="py-3" sm={6}>
+                <Form.Check custom type="checkbox" id="advanced-similar">
+                  <Form.Check.Input
+                    name="similarChars"
+                    type="checkbox"
+                    checked={similarChars}
+                    onChange={this.onUpdateSettings}
+                  />
+                  <Form.Check.Label>
+                    Exclude Similar Characters&nbsp;
+                      <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip id="tooltip-right-advanced-similar">
+                          o, 0, O, i, I, l, 1, L, |, /, \, (, ), &#123;, &#125;,
+                            <br />
+                          Will take precedence over included characters.
+                          </Tooltip>
+                      }
+                    >
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </OverlayTrigger>
+                  </Form.Check.Label>
+                </Form.Check>
+                <Form.Check
+                  custom
+                  name="uniqueChars"
+                  type="checkbox"
+                  id="advanced-unique"
+                  label="Only Unique Characters"
+                  disabled={totalCharSetCount < passwordLength}
+                  checked={uniqueChars}
+                  onChange={this.onUpdateSettings}
+                />
+              </Col>
+            </Row>
+            {this.getTotalCharTypeChecked() > 1 ? (
+              <Row>
+                <Col sm={4}>
+                  <Form.Group controlId="advanced-first-char-type">
+                    <Form.Label>First Character Type</Form.Label>
                     <Form.Control
-                      as={NumericInput}
-                      strict
-                      mobile
-                      name="minUpper"
-                      min={this.getTypeMin('upper')}
-                      max={this.getTypeMax('upper')}
-                      value={minUpper}
-                      onChange={this.onCharTypeLengthChange}
-                    />
+                      as="select"
+                      name="firstCharType"
+                      value={firstCharType}
+                      onChange={this.onCharTypeChange}
+                    >
+                      {this.renderCharTypeOptions()}
+                    </Form.Control>
                   </Form.Group>
                 </Col>
-              ) : null}
-            {(hasLowercase && availableTypesCount > 1) ||
-              charSetPools.includeLowerPool.length > 0 ? (
-                <Col sm={6}>
-                  <Form.Group controlId="advanced-lowercase-min">
-                    <Form.Label>Min. lowercase</Form.Label>
+                <Col sm={4}>
+                  <Form.Group controlId="advanced-other-char-type">
+                    <Form.Label>Other Character Type</Form.Label>
                     <Form.Control
-                      as={NumericInput}
-                      strict
-                      mobile
-                      name="minLower"
-                      min={this.getTypeMin('lower')}
-                      max={this.getTypeMax('lower')}
-                      value={minLower}
-                      onChange={this.onCharTypeLengthChange}
-                    />
+                      as="select"
+                      name="otherCharType"
+                      value={otherCharType}
+                      onChange={this.onCharTypeChange}
+                    >
+                      {this.renderCharTypeOptions()}
+                    </Form.Control>
                   </Form.Group>
                 </Col>
-              ) : null}
-            {(hasNumbers && availableTypesCount > 1) ||
-              charSetPools.includeNumsPool.length > 0 ? (
-                <Col sm={6}>
-                  <Form.Group controlId="advanced-numbers-min">
-                    <Form.Label>Min. 1234567890</Form.Label>
+                <Col sm={4}>
+                  <Form.Group controlId="advanced-last-char-type">
+                    <Form.Label>Last Character Type</Form.Label>
                     <Form.Control
-                      as={NumericInput}
-                      strict
-                      mobile
-                      name="minNums"
-                      min={this.getTypeMin('nums')}
-                      max={this.getTypeMax('nums')}
-                      value={minNums}
-                      onChange={this.onCharTypeLengthChange}
-                    />
+                      as="select"
+                      name="lastCharType"
+                      value={lastCharType}
+                      onChange={this.onCharTypeChange}
+                    >
+                      {this.renderCharTypeOptions()}
+                    </Form.Control>
                   </Form.Group>
                 </Col>
-              ) : null}
-            {(hasSymbols && availableTypesCount > 1) ||
-              charSetPools.includeSymsPool.length > 0 ? (
-                <Col sm={6}>
-                  <Form.Group controlId="advanced-symbols-min">
-                    <Form.Label>Min. $`/^^|&gt;()!_&amp;</Form.Label>
-                    <Form.Control
-                      as={NumericInput}
-                      strict
-                      mobile
-                      name="minSyms"
-                      min={this.getTypeMin('syms')}
-                      max={this.getTypeMax('syms')}
-                      value={minSyms}
-                      onChange={this.onCharTypeLengthChange}
-                    />
-                  </Form.Group>
-                </Col>
-              ) : null}
-          </Row>
-        </Col>
-      </Row>
-      </div >
+              </Row>
+            ) : null}
+            <Row>
+              {(hasUppercase && availableTypesCount > 1) ||
+                charSetPools.includeUpperPool.length > 0 ? (
+                  <Col sm={6}>
+                    <Form.Group controlId="advanced-uppercase-min">
+                      <Form.Label>Min. UPPERCASE</Form.Label>
+                      <Form.Control
+                        as={NumericInput}
+                        strict
+                        mobile
+                        name="minUpper"
+                        min={this.getTypeMin('upper')}
+                        max={this.getTypeMax('upper')}
+                        value={minUpper}
+                        onChange={this.onCharTypeLengthChange}
+                      />
+                    </Form.Group>
+                  </Col>
+                ) : null}
+              {(hasLowercase && availableTypesCount > 1) ||
+                charSetPools.includeLowerPool.length > 0 ? (
+                  <Col sm={6}>
+                    <Form.Group controlId="advanced-lowercase-min">
+                      <Form.Label>Min. lowercase</Form.Label>
+                      <Form.Control
+                        as={NumericInput}
+                        strict
+                        mobile
+                        name="minLower"
+                        min={this.getTypeMin('lower')}
+                        max={this.getTypeMax('lower')}
+                        value={minLower}
+                        onChange={this.onCharTypeLengthChange}
+                      />
+                    </Form.Group>
+                  </Col>
+                ) : null}
+              {(hasNumbers && availableTypesCount > 1) ||
+                charSetPools.includeNumsPool.length > 0 ? (
+                  <Col sm={6}>
+                    <Form.Group controlId="advanced-numbers-min">
+                      <Form.Label>Min. 1234567890</Form.Label>
+                      <Form.Control
+                        as={NumericInput}
+                        strict
+                        mobile
+                        name="minNums"
+                        min={this.getTypeMin('nums')}
+                        max={this.getTypeMax('nums')}
+                        value={minNums}
+                        onChange={this.onCharTypeLengthChange}
+                      />
+                    </Form.Group>
+                  </Col>
+                ) : null}
+              {(hasSymbols && availableTypesCount > 1) ||
+                charSetPools.includeSymsPool.length > 0 ? (
+                  <Col sm={6}>
+                    <Form.Group controlId="advanced-symbols-min">
+                      <Form.Label>Min. $`/^^|&gt;()!_&amp;</Form.Label>
+                      <Form.Control
+                        as={NumericInput}
+                        strict
+                        mobile
+                        name="minSyms"
+                        min={this.getTypeMin('syms')}
+                        max={this.getTypeMax('syms')}
+                        value={minSyms}
+                        onChange={this.onCharTypeLengthChange}
+                      />
+                    </Form.Group>
+                  </Col>
+                ) : null}
+            </Row>
+          </Col>
+        </Row>
+      </div>
     );
   }
 }
